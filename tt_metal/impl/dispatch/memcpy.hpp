@@ -5,7 +5,12 @@
 #pragma once
 
 #include <cstdint>
+#if defined(__x86_64__)
 #include <emmintrin.h>
+#elif defined(__aarch64__)
+#include "simde/x86/sse2.h"
+#include "simde/x86/avx2.h"
+#endif
 #include "tt_metal/common/assert.hpp"
 #include "tt_metal/tt_stl/aligned_allocator.hpp"
 #include "umd/device/device_api_metal.h"

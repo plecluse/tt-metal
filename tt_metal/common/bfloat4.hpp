@@ -7,7 +7,12 @@
 #include <iostream>
 #include <random>
 #include <vector>
+#if defined(__x86_64__)
 #include <immintrin.h>
+#elif defined(__aarch64__)
+#include "simde/x86/sse2.h"
+#include "simde/x86/avx2.h"
+#endif
 
 #include "tt_metal/common/assert.hpp"
 #include "tt_metal/common/tt_backend_api_types.hpp"
