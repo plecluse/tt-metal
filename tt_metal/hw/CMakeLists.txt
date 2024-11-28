@@ -19,15 +19,21 @@ set(TYPES
 )
 
 include(FetchContent)
-FetchContent_Declare(
-    sfpi
-    URL
-        https://github.com/tenstorrent/sfpi/releases/download/v6.0.0/sfpi-release.tgz
-    URL_HASH MD5=d837d26a2312d27815179995fdea83bd
-    SOURCE_DIR
-    ${PROJECT_SOURCE_DIR}/runtime/sfpi
-)
-FetchContent_MakeAvailable(sfpi)
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|amd64")
+    FetchContent_Declare(
+        sfpi
+        URL
+            https://github.com/tenstorrent/sfpi/releases/download/v6.0.0/sfpi-release.tgz
+        URL_HASH MD5=d837d26a2312d27815179995fdea83bd
+        SOURCE_DIR
+        ${PROJECT_SOURCE_DIR}/runtime/sfpi
+    )
+    FetchContent_MakeAvailable(sfpi)
+elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    if(NOT EXISTS ${PROJECT_SOURCE_DIR}/runtime/sfpi)
+        message(FATAL_ERROR "sfpi need to be installed manually in runtime/sfpi on aarch64")
+    endif()
+endif()
 
 foreach(ARCH IN LISTS ARCHS)
     set(DEV_MEM_MAP "${PROJECT_SOURCE_DIR}/tt_metal/hw/inc/${ARCH}/dev_mem_map.h")
