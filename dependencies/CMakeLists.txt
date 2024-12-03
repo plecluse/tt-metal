@@ -85,3 +85,11 @@ CPMAddPackage(NAME fmt GITHUB_REPOSITORY fmtlib/fmt GIT_TAG 11.0.1)
 ############################################################################################################################
 
 CPMAddPackage(NAME range-v3 GITHUB_REPOSITORY ericniebler/range-v3 GIT_TAG 0.12.0)
+
+############################################################################################################################
+# simde : https://github.com/simd-everywhere/simde.git
+############################################################################################################################
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    CPMAddPackage(NAME simde GITHUB_REPOSITORY simd-everywhere/simde GIT_TAG e8c881d571415498cf02763a285247f23cfa23a8)
+endif()

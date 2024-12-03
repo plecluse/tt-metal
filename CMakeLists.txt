@@ -215,7 +215,6 @@ add_compile_options(
     -Wswitch
     -Wuninitialized
     -Wno-unused-parameter
-    -mavx2
     -fPIC
     -fvisibility-inlines-hidden
     -fno-lto # FIXME: This seems to be here for ttnn; it should go to TTNN, then.
@@ -249,6 +248,20 @@ add_link_options(
     "$<$<BOOL:${ENABLE_TSAN}>:-fsanitize=thread>"
     "$<$<BOOL:${ENABLE_UBSAN}>:-fsanitize=undefined>"
 )
+
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|amd64")
+    add_compile_options(-mavx2)
+endif()
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64")
+    find_package(simde)
+    if(simde_FOUND)
+        message(STATUS "aarch64 SIMDE_PATH=${simde_SOURCE_DIR}")
+        add_compile_options(-DSIMDE_ENABLE_NATIVE_ALIASES)
+        include_directories(${simde_SOURCE_DIR})
+    else()
+        message(FATAL_ERROR "aarch64 simde is mandatoy")
+    endif()
+endif()
 
 if(ENABLE_CODE_TIMERS)
     add_compile_definitions(TT_ENABLE_CODE_TIMERS)
